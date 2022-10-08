@@ -86,16 +86,25 @@ public class HelloworldController {
   	
   	@RequestMapping(value = "/Permit-Mobile/rest/report", method = RequestMethod.POST)
 	@ResponseBody
-	public SubmitConfirmation report() throws Exception {
-		
+	public SubmitConfirmation report(HttpServletRequest request) throws Exception {
+  		
+  		String report = request.getParameter("report");
+  		String email = request.getParameter("email");
+  		String appVersion = request.getParameter("appVersion");
   		SubmitConfirmation ann = new SubmitConfirmation();
   		List<String> cons = new ArrayList<String>();
-  		cons.add("CO-19271822");
-  		cons.add("CA-12981925");
-  		cons.add("New app is available, please update");
-  		ann.setConfirmNumberList(cons);
+		if(report != null) {
+	  		cons.add("CO-19271822");
+	  		cons.add("CA-12981925");
+	  		cons.add(email + " --- Version " + appVersion);
+	  		ann.setConfirmNumberList(cons);
+		} else {
+			ann.setStatus("FAILED");
+			cons.add("Input is empty");
+			ann.setConfirmNumberList(cons);
+		}
 	
-	  return ann;
+		return ann;
 
 	}
   	
