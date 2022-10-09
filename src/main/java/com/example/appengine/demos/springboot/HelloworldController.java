@@ -112,11 +112,11 @@ public class HelloworldController {
   	
  	@RequestMapping(value = "/Permit-Mobile/rest/updateannouncement", method = RequestMethod.POST)
 	@ResponseBody
-	public void updateAnnoucement(HttpServletRequest request) throws Exception {
+	public Announcement updateAnnoucement(HttpServletRequest request) throws Exception {
 		
  		aService.setAnnouncement(request.getParameter("id"), request.getParameter("title"), request.getParameter("message"));
 	
- 		
+ 		return aService.getAnnouncement();
 
 	}
   
