@@ -17,23 +17,6 @@ public class AudioFileUploadController {
 
 	@Autowired
 	CloudFileService cloudService;
-
-	@RequestMapping(value = "/Permit-Mobile/rest/report", method = RequestMethod.POST)
-	@ResponseBody
-	public SubmitConfirmation upload(@RequestParam("file") MultipartFile file,
-			@RequestParam("firearmKey") String firearmKey) throws Exception {
-		SubmitConfirmation confirm = new SubmitConfirmation();
-		confirm.setStatus("Success");
-		try {
-			// Get the file and save it somewhere
-			byte[] bytes = file.getBytes();
-			cloudService.saveAudioFile(bytes, firearmKey);			
-		} catch (Exception e) {
-			e.printStackTrace();
-			confirm.setStatus("Fail");
-		}
-		return confirm;
-	}
 	
 	@RequestMapping(value = "/getAudio", method = RequestMethod.GET)
 	public void getAudioBinary(HttpServletRequest request,

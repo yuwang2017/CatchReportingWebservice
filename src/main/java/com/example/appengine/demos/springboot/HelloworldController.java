@@ -18,10 +18,12 @@ package com.example.appengine.demos.springboot;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.example.appengine.demos.springboot.bean.ReportStatus;
 import com.example.appengine.demos.springboot.service.CloudFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -87,6 +89,16 @@ public class HelloworldController {
 	  
 	  return ann;
 
+	}
+
+	@GetMapping(value = "/Permit-Mobile/rest/checkStatus/{reportID}")
+	@ResponseBody
+	public ReportStatus checkStatus (@PathVariable String reportID) throws Exception {
+		ReportStatus reportStatus = new ReportStatus();
+		reportStatus.setReportID(reportID);
+		reportStatus.setStatus("Submitted");
+		reportStatus.setSubmitDate(new Date());
+		return reportStatus;
 	}
   	
   	
