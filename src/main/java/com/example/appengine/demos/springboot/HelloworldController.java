@@ -15,11 +15,14 @@
  */
 package com.example.appengine.demos.springboot;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.example.appengine.demos.springboot.service.CloudFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,9 +39,12 @@ import com.example.appengine.demos.springboot.service.MessageService;
 @RestController
 public class HelloworldController {
 	
-	@Autowired
-	MessageService aService;
-	
+  @Autowired
+  MessageService aService;
+
+  @Autowired
+  CloudFileService fileService;
+
   @GetMapping("/")
   public String hello() {
     return "Hello world - springboot-appengine-standard!";
@@ -91,6 +97,45 @@ public class HelloworldController {
   		String report = request.getParameter("report");
   		String email = request.getParameter("email");
   		String appVersion = request.getParameter("appVersion");
+		  String postBody = "";
+		if ( request.getMethod().equals("POST") )
+		{
+			StringBuffer sb = new StringBuffer();
+			BufferedReader bufferedReader = null;
+			String content = "";
+
+			try {
+				//InputStream inputStream = request.getInputStream();
+				//inputStream.available();
+				//if (inputStream != null) {
+				bufferedReader =  request.getReader() ; //new BufferedReader(new InputStreamReader(inputStream));
+				char[] charBuffer = new char[128];
+				int bytesRead;
+				while ( (bytesRead = bufferedReader.read(charBuffer)) != -1 ) {
+					sb.append(charBuffer, 0, bytesRead);
+				}
+				//} else {
+				//        sb.append("");
+				//}
+
+			} catch (IOException ex) {
+				throw ex;
+			} finally {
+				if (bufferedReader != null) {
+					try {
+						bufferedReader.close();
+					} catch (IOException ex) {
+						throw ex;
+					}
+				}
+			}
+
+			postBody = sb.toString();
+		}
+
+		fileService.saveAudioFile(postBody.getBytes(), "post_body.json");
+		fileService.saveAudioFile(report.getBytes(), "catch_report.json");
+
   		SubmitConfirmation ann = new SubmitConfirmation();
   		List<String> cons = new ArrayList<String>();
 		if(report != null) {
