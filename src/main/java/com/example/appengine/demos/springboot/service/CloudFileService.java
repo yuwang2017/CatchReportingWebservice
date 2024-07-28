@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 public class CloudFileService {
 
-	public static final String BUCKET_NAME = "survey_cat_audio_files";
+	public static final String BUCKET_NAME = "ert_report_files";
 
 
 	private static Bucket bucket = null;
